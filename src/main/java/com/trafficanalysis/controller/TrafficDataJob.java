@@ -54,10 +54,10 @@ public class TrafficDataJob {
                     }
                 ,
                 new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                        .withUrl("jdbc:mysql://127.0.0.1:3306/AccidentRecords")
+                        .withUrl("jdbc:mysql://$database_address/AccidentRecords")
                         .withDriverName("com.mysql.cj.jdbc.Driver")
-                        .withUsername("root")
-                        .withPassword("Lolipop:P123")
+                        .withUsername($username)
+                        .withPassword($password)
                         .build()
         );
 
