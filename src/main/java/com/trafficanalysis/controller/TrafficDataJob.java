@@ -18,10 +18,10 @@ public class TrafficDataJob {
         Configuration configuration = new Configuration();
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
         env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(configuration);
-        // Add a source function to your data stream
+        // Add a source function to the data stream
         DataStream<AccidentRecord> trafficDataStream = env.addSource(new ApiSourceFunction()).setParallelism(1);
 
-        // Define JDBC sink
+        // Define JDBC sink for the stream
         SinkFunction<AccidentRecord> jdbcSink = JdbcSink.sink(
                 "INSERT INTO accidentsRecordsTable (AccidentNum, AccidentYear, AccidentMonth, AccidentDay, AccidentHour, AccidentWeekday, AccidentLocation, CollisionType, ClassificationOfAccident, ImpactLocation, InitialImpactType, IntTrafficControl, Light, LightForReport, RoadJurisdiction, TrafficControl, TrafficControlCondition, ThruLaneNo, NorthboundDisobeyCount, SouthboundDisobeyCount, PedestrianInvolved, CyclistInvolved, MotorcyclistInvolved, EnvironmentCondition1, EnvironmentCondition2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                         "ON DUPLICATE KEY UPDATE AccidentYear = VALUES(AccidentYear), AccidentMonth = VALUES(AccidentMonth), AccidentDay = VALUES(AccidentDay), AccidentHour = VALUES(AccidentHour), AccidentWeekday = VALUES(AccidentWeekday), AccidentLocation = VALUES(AccidentLocation), CollisionType = VALUES(CollisionType), ClassificationOfAccident = VALUES(ClassificationOfAccident), ImpactLocation = VALUES(ImpactLocation), InitialImpactType = VALUES(InitialImpactType), IntTrafficControl = VALUES(IntTrafficControl), Light = VALUES(Light), LightForReport = VALUES(LightForReport), RoadJurisdiction = VALUES(RoadJurisdiction), TrafficControl = VALUES(TrafficControl), TrafficControlCondition = VALUES(TrafficControlCondition), ThruLaneNo = VALUES(ThruLaneNo), NorthboundDisobeyCount = VALUES(NorthboundDisobeyCount), SouthboundDisobeyCount = VALUES(SouthboundDisobeyCount), PedestrianInvolved = VALUES(PedestrianInvolved), CyclistInvolved = VALUES(CyclistInvolved), MotorcyclistInvolved = VALUES(MotorcyclistInvolved), EnvironmentCondition1 = VALUES(EnvironmentCondition1), EnvironmentCondition2 = VALUES(EnvironmentCondition2)",
@@ -62,7 +62,7 @@ public class TrafficDataJob {
         );
 
         // Add the JDBC sink to the data stream
-        trafficDataStream.addSink(jdbcSink).setParallelism(1);
+        trafficDataStream.addSink(jdbcSink).setParallelism(1); //for local machine
 
         // Execute the job
         env.execute("Traffic Collision Data Job");
